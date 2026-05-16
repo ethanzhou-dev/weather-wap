@@ -633,7 +633,7 @@ def weather():
 
     safe_city = escape(city)
 
-    url = f"https://wttr.in/{urllib.parse.quote(city)}?format=j1&lang=zh"
+    url = f"https://wttr.in/{urllib.parse.quote(city)}?format=j1&lang=zh-cn"
     is_success = False
 
     try:
@@ -663,10 +663,12 @@ def weather():
             current = data["current_condition"][0]
             today = data["weather"][0]
 
-            if "lang_zh" in current:
-                desc = current["lang_zh"][0]["value"]
-            else:
-                desc = current["weatherDesc"][0]["value"]
+            desc = "未知"
+            for k in ("lang_zh-cn", "lang_zh", "lang_xx", "weatherDesc"):
+                val_list = current.get(k)
+                if val_list and isinstance(val_list, list) and "value" in val_list[0]:
+                    desc = val_list[0]["value"]
+                    break
 
             temp = current["temp_C"]
             humidity = current["humidity"]
@@ -775,7 +777,7 @@ def weather_detail():
     safe_city = escape(city)
     safe_date = escape(target_date)
 
-    url = f"https://wttr.in/{urllib.parse.quote(city)}?format=j1&lang=zh"
+    url = f"https://wttr.in/{urllib.parse.quote(city)}?format=j1&lang=zh-cn"
 
     try:
         headers = {
@@ -820,10 +822,12 @@ def weather_detail():
                         "提示",
                         "<div class='content'>未获取到该日期的时段详情数据。</div>",
                     )
-                if "lang_zh" in hourly:
-                    desc = hourly["lang_zh"][0]["value"]
-                else:
-                    desc = hourly["weatherDesc"][0]["value"]
+                desc = "未知"
+                for k in ("lang_zh-cn", "lang_zh", "lang_xx", "weatherDesc"):
+                    val_list = hourly.get(k)
+                    if val_list and isinstance(val_list, list) and "value" in val_list[0]:
+                        desc = val_list[0]["value"]
+                        break
 
                 feels_like = hourly.get("FeelsLikeC", "未知")
                 humidity = hourly.get("humidity", "未知")
