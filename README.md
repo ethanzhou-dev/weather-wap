@@ -1,5 +1,5 @@
 ---
-title: Weather Wap
+title: Weather WAP
 emoji: 🌤️
 colorFrom: blue
 colorTo: gray
