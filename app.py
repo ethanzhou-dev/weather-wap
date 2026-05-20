@@ -1,6 +1,7 @@
 import os
 import re
 import requests
+from requests.adapters import HTTPAdapter
 import requests_cache
 import concurrent.futures
 from flask import Flask, request, Response, redirect, url_for, send_file
@@ -14,9 +15,9 @@ app.config["COMPRESS_ALGORITHM"] = ["gzip", "deflate"]
 Compress(app)
 
 http_session = requests_cache.CachedSession(
-    "weather_cache", backend="sqlite", expire_after=1800, stale_if_error=True
+    "/tmp/weather_cache", backend="sqlite", expire_after=1800, stale_if_error=True
 )
-adapter = requests.adapters.HTTPAdapter(pool_connections=100, pool_maxsize=100)
+adapter = HTTPAdapter(pool_connections=100, pool_maxsize=100)
 http_session.mount("http://", adapter)
 http_session.mount("https://", adapter)
 
@@ -605,13 +606,13 @@ def city():
     """第二页：选择城市"""
     prov = request.args.get("prov")
     if not prov or prov not in cities_db:
-        return index()
+        return redirect("/")
 
     options = "".join([f'<option value="{c}">{c}</option>' for c in cities_db[prov]])
     body = f"""
     <div class="header">天气查询</div>
     <div class="content">
-        已选省份: <b>{prov}</b><hr/>
+        已选省份: <b>{escape(prov)}</b><hr/>
         请选择城市:<br/>
         <form action="/weather" method="get">
             <select name="city">
@@ -702,7 +703,7 @@ def weather():
             result_text = (
                 f'<div class="header">[{safe_city}实时天气]</div>'
                 f'<div class="content">'
-                f"概况: <b>{desc}</b><br/>"
+                f"概况: <b>{escape(desc)}</b><br/>"
                 f"温度: <b>{min_temp}~{max_temp}℃</b><br/>"
                 f"当前: <b>{temp}℃</b> (体感 {feels_like}℃)"
                 f"<hr/>"
@@ -711,7 +712,7 @@ def weather():
                 f"降水: {precip} mm<br/>"
                 f"云量: {cloudcover}%<br/>"
                 f"气压: {pressure} hPa<br/>"
-                f"风向风速: {wind_dir} {wind_kmh} km/h<br/>"
+                f"风向风速: {escape(wind_dir)} {wind_kmh} km/h<br/>"
                 f"能见度: {visibility} km<br/>"
                 f"紫外线: {uv_index}"
                 f"<hr/>"
@@ -729,7 +730,7 @@ def weather():
                     dt = datetime.strptime(date_str, "%Y-%m-%d")
                     weekday_str = weekdays[dt.weekday()]
                     short_date = date_str[5:]
-                except:
+                except Exception:
                     weekday_str = ""
                     short_date = date_str
 
@@ -843,7 +844,7 @@ def weather_detail():
                 result_text = (
                     f'<div class="header">[{safe_city} {safe_date[5:]} 预报]</div>'
                     f'<div class="content">'
-                    f"概况: <b>{desc}</b><br/>"
+                    f"概况: <b>{escape(desc)}</b><br/>"
                     f"温度: <b>{min_temp}~{max_temp}℃</b><br/>"
                     f"降雨概率: {chance_of_rain}%"
                     f"<hr/>"
@@ -852,7 +853,7 @@ def weather_detail():
                     f"降水: {precip} mm<br/>"
                     f"云量: {cloudcover}%<br/>"
                     f"气压: {pressure} hPa<br/>"
-                    f"风向风速: {wind_dir} {wind_kmh} km/h<br/>"
+                    f"风向风速: {escape(wind_dir)} {wind_kmh} km/h<br/>"
                     f"能见度: {visibility} km<br/>"
                     f"紫外线: {uv_index}"
                     f"<hr/>"
