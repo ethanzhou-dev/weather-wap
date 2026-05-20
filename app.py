@@ -511,7 +511,7 @@ def get_future_aqi_data(city_name, target_date):
 def generate_xhtml_response(title, body_content):
     xhtml_str = f"""<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
 <head>
     <title>{title}</title>
     <link rel="apple-touch-icon" href="/speeddial-icon.png" />
