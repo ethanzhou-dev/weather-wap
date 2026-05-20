@@ -520,16 +520,17 @@ def generate_xhtml_response(title, body_content):
     <meta http-equiv="Cache-Control" content="max-age=0" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
     <style type="text/css">
-        body {{ background-color: #F4F4F4; color: #222222; margin: 0; padding: 0; }}
-        a {{ color: #003399; text-decoration: none; }}
+        body {{ background-color: whitesmoke; color: black; margin: 0; padding: 0; }}
+        a {{ color: darkblue; text-decoration: none; }}
+        a:visited {{ color: darkblue; }}
         a:hover {{ text-decoration: underline; }}
-        .header {{ background-color: #3B5998; color: #FFFFFF; padding: 4px 6px; font-weight: bold; border-bottom: 1px solid #000000; }}
+        .header {{ background-color: #3B5998; color: white; padding: 4px 6px; font-weight: bold; }}
         .content {{ padding: 6px; line-height: 1.5; }}
-        .content b {{ color: #000000; }}
-        hr {{ border: 0; border-bottom: 1px solid #CCCCCC; margin: 6px 0; }}
-        select, input {{ border: 1px solid #999999; background-color: #FFFFFF; margin-top: 4px; }}
-        input[type="submit"] {{ background-color: #E0E0E0; padding: 2px 6px; }}
-        .nav {{ background-color: #EAEAEA; padding: 6px; border-top: 1px solid #CCCCCC; text-align: center; }}
+        .content b {{ color: black; }}
+        hr {{ border: 0; border-bottom: 1px solid silver; margin: 6px 0; }}
+        select, input {{ border: 1px solid silver; background-color: white; margin-top: 4px; }}
+        input[type="submit"] {{ background-color: gainsboro; border: 1px solid silver; padding: 2px 6px; }}
+        .nav {{ background-color: gainsboro; padding: 6px; border-top: 1px solid silver; text-align: center; }}
     </style>
 </head>
 <body>
